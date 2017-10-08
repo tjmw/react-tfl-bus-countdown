@@ -2,7 +2,7 @@ export const PREDICTIONS_REQUESTED = 'counter/PREDICTIONS_REQUESTED'
 export const UPDATE_PREDICTIONS = 'counter/UPDATE_PREDICTIONS'
 
 const initialState = {
-  predictions: null,
+  predictions: [],
   isFetchingPredictions: false,
 }
 
@@ -38,18 +38,16 @@ export const requestStopPredictions = () => {
       type: PREDICTIONS_REQUESTED
     });
 
-    fetch(url)
+    return fetch(url)
       .then(function(response) {
         return response.json();
       }).then(function(json) {
-        console.log(json);
-
-        dispatch({
+        return dispatch({
           type: UPDATE_PREDICTIONS,
-          predictions: null,
+          predictions: json,
         });
       }).catch(function(err) {
-        console.log("Error fetching stop predictions");
+        console.log("Error fetching stop predictions:", err);
       });
   };
 };
