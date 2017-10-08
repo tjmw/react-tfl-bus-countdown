@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { requestStopPredictions } from "../../modules/stop";
+import { requestStopPredictions } from "../../redux/modules/predictions/actions";
 import Prediction from './prediction';
 
 class Stop extends Component {
@@ -11,7 +11,6 @@ class Stop extends Component {
 
   render() {
     const { predictions } = this.props;
-    console.log(this.props);
 
     return (
       <div>
@@ -27,7 +26,7 @@ class Stop extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return { predictions: state.stop.predictions }
+  return { predictions: state.predictions.predictions }
 }
 
 const mapDispatchToProps = dispatch =>
