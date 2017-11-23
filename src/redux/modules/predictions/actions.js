@@ -4,8 +4,8 @@ export const UPDATE_PREDICTIONS = 'counter/UPDATE_PREDICTIONS'
 export const requestStopPredictions = () => {
   return (dispatch) => {
     const naptanId = "490000014A";
-    const appId = "XXX";
-    const appKey = "XXX";
+    const appId = process.env.REACT_APP_TFL_APP_ID;
+    const appKey = process.env.REACT_APP_TFL_APP_KEY;
     const url = `https://api.tfl.gov.uk/StopPoint/${naptanId}/Arrivals?mode=bus&app_id=${appId}&app_key=${appKey}`;
 
     dispatch({
