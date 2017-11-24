@@ -1,0 +1,66 @@
+#root {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 1em;
+  color: #354B5E;
+}
+
+.content {
+  margin: 2em 0;
+}
+
+.content table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.clickable-table tr:hover {
+  background: #FCF9D4;
+  cursor: pointer;
+}
+
+.button-large {
+  font-size: 110%;
+}
+
+.back-button {
+  margin-top: 1em;
+}
+
+.prediction-route-number {
+  width: 20%;
+}
+
+.prediction-destination {
+  width: 50%;
+}
+
+.prediction-time {
+  width: 30%;
+}
+
+.stop-indicator {
+  width: 25%;
+}
+
+.stop-direction {
+  font-size: 0.75em;
+  margin-bottom: 0.15em;
+}
+
+.stop-compass-direction {
+  margin-left: 0.75em;
+}
+
+.line {
+  background-color: #CA3C3C;
+  color: #FFFFFF;
+  display: inline-block;
+  font-size: 0.5em;
+  margin-right: 0.25em;
+  padding: 0.25em;
+}
+
+.line:last-of-type {
+  margin-right: 0;
+}

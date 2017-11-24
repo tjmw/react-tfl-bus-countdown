@@ -5,15 +5,13 @@ import Stop from '../stop';
 
 const App = () => (
   <div>
-    <header>
-      <Link to="/">Home</Link>
-      <Link to="/stop">Example Stop</Link>
-    </header>
-
-    <main>
+    <div className="header">
+      <a className="pure-button pure-button-primary button-large" href="#">Show nearby stops</a>
+    </div>
+    <div className="content">
       <Route exact path="/" component={Home} />
       <Route exact path="/stop/:naptanId" component={Stop} />
-    </main>
+    </div>
   </div>
 );
 

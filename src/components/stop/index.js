@@ -14,14 +14,31 @@ class Stop extends Component {
   render() {
     const { predictions } = this.props;
 
+    if (predictions && predictions.length > 0) {
+      return this.renderPredictions();
+    } else {
+      return this.renderEmpty();
+    }
+  }
+
+  renderEmpty() {
+    return (
+      <div>No predicted arrivals</div>
+    );
+  }
+
+  renderPredictions() {
+    const { predictions } = this.props;
+
     return (
       <div>
-        <h1>Stop page</h1>
-        <ul>
-          {predictions && predictions.map((prediction) =>
-            <Prediction key={prediction.id} prediction={prediction} />
-          )}
-        </ul>
+        <table className="pure-table pure-table-horizontal">
+          <tbody>
+            {predictions.map((prediction) =>
+              <Prediction key={prediction.id} prediction={prediction} />
+            )}
+          </tbody>
+        </table>
       </div>
     );
   }
