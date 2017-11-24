@@ -34,9 +34,10 @@ class Stop extends Component {
       <div>
         <table className="pure-table pure-table-horizontal">
           <tbody>
-            {predictions.map((prediction) =>
-              <Prediction key={prediction.id} prediction={prediction} />
-            )}
+            {predictions
+               .sort((p1, p2) => p1.timeToStation - p2.timeToStation)
+               .map((prediction) => <Prediction key={prediction.id} prediction={prediction} />)
+            }
           </tbody>
         </table>
       </div>
