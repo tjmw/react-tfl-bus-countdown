@@ -6,7 +6,9 @@ import Prediction from './prediction';
 
 class Stop extends Component {
   componentDidMount() {
-    this.props.requestStopPredictions();
+    const { naptanId } = this.props;
+
+    this.props.requestStopPredictions(naptanId);
   }
 
   render() {
@@ -25,16 +27,20 @@ class Stop extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return { predictions: state.predictions.predictions }
+const mapStateToProps = (state, ownProps) => {
+  return {
+    naptanId: ownProps.match.params.naptanId,
+    predictions: state.predictions.predictions
+  }
 }
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return bindActionCreators(
     {
       requestStopPredictions
     },
     dispatch
   );
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Stop);

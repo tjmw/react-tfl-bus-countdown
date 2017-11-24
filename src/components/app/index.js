@@ -12,7 +12,7 @@ const App = () => (
 
     <main>
       <Route exact path="/" component={Home} />
-      <Route exact path="/stop" component={Stop} />
+      <Route exact path="/stop/:naptanId" component={Stop} />
     </main>
   </div>
 );
