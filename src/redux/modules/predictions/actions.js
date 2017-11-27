@@ -2,8 +2,11 @@ import "../../../jQueryHack";
 import "signalr";
 import "../../../tflHubs";
 
-export const PREDICTIONS_REQUESTED = 'counter/PREDICTIONS_REQUESTED'
-export const UPDATE_PREDICTIONS = 'counter/UPDATE_PREDICTIONS'
+export const PREDICTIONS_REQUESTED = 'PREDICTIONS_REQUESTED';
+export const UPDATE_PREDICTIONS = 'UPDATE_PREDICTIONS';
+
+const APP_ID = process.env.REACT_APP_TFL_APP_ID;
+const APP_KEY = process.env.REACT_APP_TFL_APP_KEY;
 
 const $ = window.jQuery;
 
@@ -15,50 +18,61 @@ const toLowerFirst = (string) => {
   return string.charAt(0).toLowerCase() + string.slice(1);
 }
 
+// The initial predictions fetch has camel case keys (lowercase first letter)
+// but the realtime updates have uppercase first letters. Normalize here
+// (shallow only).
+const normalizePredictions = (predictions) => {
+  return predictions.map((p) => {
+    return Object.keys(p).reduce((acc, key) => {
+      acc[toLowerFirst(key)] = p[key];
+      return acc;
+    }, {})
+  });
+}
+
 export const requestStopPredictions = (naptanId) => {
   return (dispatch) => {
-    const appId = process.env.REACT_APP_TFL_APP_ID;
-    const appKey = process.env.REACT_APP_TFL_APP_KEY;
-    const url = `https://api.tfl.gov.uk/StopPoint/${naptanId}/Arrivals?mode=bus&app_id=${appId}&app_key=${appKey}`;
-
-    // Push notification callback
-    hub.client.showPredictions = predictions => {
-      console.log("🚌 New predictions @", new Date().toTimeString());
-      console.table(predictions, ["LineName", "VehicleId", "DestinationName", "ExpectedArrival", "TimeToLive", "Id"]);
-
-      const transformedPredictions = predictions.map((p) => {
-        return Object.keys(p).reduce((acc, key) => {
-          acc[toLowerFirst(key)] = p[key];
-          return acc;
-        }, {})
-      });
-
-      dispatch({
-        type: UPDATE_PREDICTIONS,
-        predictions: transformedPredictions,
-      });
-    }
-
     dispatch({
       type: PREDICTIONS_REQUESTED
     });
 
+    const url = `https://api.tfl.gov.uk/StopPoint/${naptanId}/Arrivals?mode=bus&app_id=${APP_ID}&app_key=${APP_KEY}`;
+
     return fetch(url)
-      .then(function(response) {
+      .then((response) => {
         return response.json();
-      }).then(function(json) {
-        $.connection.hub.start().done(() => {
-          const lineRooms = [{ "NaptanId": naptanId }];
-          console.log("Registering for updates: " + naptanId);
-          hub.server.addLineRooms(lineRooms)
-        });
+      }).then((json) => {
+        dispatch(subscribeToPredictions(naptanId));
 
         return dispatch({
           type: UPDATE_PREDICTIONS,
           predictions: json,
         });
-      }).catch(function(err) {
+      }).catch((err) => {
         console.log("Error fetching stop predictions:", err);
       });
+  };
+};
+
+const subscribeToPredictions = (naptanId) => {
+  return (dispatch) => {
+    // Push notification callback
+    hub.client.showPredictions = predictions => {
+      console.log("🚌 New predictions @", new Date().toTimeString());
+      console.table(predictions, ["LineName", "VehicleId", "DestinationName", "ExpectedArrival", "TimeToLive", "Id"]);
+
+      const normalizedPredictions = normalizePredictions(predictions);
+
+      dispatch({
+        type: UPDATE_PREDICTIONS,
+        predictions: normalizedPredictions,
+      });
+    }
+
+    $.connection.hub.start().done(() => {
+      const lineRooms = [{ "NaptanId": naptanId }];
+      console.log("Registering for updates: " + naptanId);
+      hub.server.addLineRooms(lineRooms)
+    });
   };
 };
