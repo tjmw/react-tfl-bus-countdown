@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { requestStopPredictions } from "../../redux/modules/predictions/actions";
 import Prediction from './prediction';
+import { View, Text, StyleSheet } from 'react-native'
 
 class Stop extends Component {
   componentDidMount() {
@@ -23,7 +24,9 @@ class Stop extends Component {
 
   renderEmpty() {
     return (
-      <div>No predicted arrivals</div>
+      <View>
+        <Text>No predicted arrivals</Text>
+      </View>
     );
   }
 
@@ -31,16 +34,12 @@ class Stop extends Component {
     const { predictions } = this.props;
 
     return (
-      <div>
-        <table className="pure-table pure-table-horizontal">
-          <tbody>
-            {predictions
-               .sort((p1, p2) => p1.timeToStation - p2.timeToStation)
-               .map((prediction) => <Prediction key={prediction.id} prediction={prediction} />)
-            }
-          </tbody>
-        </table>
-      </div>
+      <View>
+        {predictions
+            .sort((p1, p2) => p1.timeToStation - p2.timeToStation)
+            .map((prediction) => <Prediction key={prediction.id} prediction={prediction} />)
+        }
+      </View>
     );
   }
 }
@@ -51,6 +50,14 @@ const mapStateToProps = (state, ownProps) => {
     predictions: state.predictions.predictions
   }
 }
+
+const styles = StyleSheet.create({
+  table: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
+});
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return bindActionCreators(

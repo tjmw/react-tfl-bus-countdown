@@ -1,20 +1,18 @@
 import React from 'react';
-import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import store, { history } from './redux/store';
 import App from './components/app';
+import { AppRegistry } from 'react-native'
 
-import './pure-min.css';
-import './main.css';
-
-const target = document.querySelector('#root');
-
-render(
+const MyApp = () => (
   <Provider store={store}>
     <ConnectedRouter history={history}>
       <App />
     </ConnectedRouter>
-  </Provider>,
-  target
+  </Provider>
 );
+
+// App registration and rendering
+AppRegistry.registerComponent('MyApp', () => MyApp)
+AppRegistry.runApplication('MyApp', { rootTag: document.getElementById('root') })

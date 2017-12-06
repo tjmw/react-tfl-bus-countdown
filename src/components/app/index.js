@@ -3,16 +3,18 @@ import { Route, Link } from 'react-router-dom';
 import Home from '../home';
 import Stop from '../stop';
 
+import { View, Button } from 'react-native'
+
 const App = () => (
-  <div>
-    <div className="header">
-      <a className="pure-button pure-button-primary button-large" href="#">Show nearby stops</a>
-    </div>
-    <div className="content">
+  <View>
+    <View>
+      <Button title="Show nearby stops" />
+    </View>
+    <View>
       <Route exact path="/" component={Home} />
       <Route exact path="/stop/:naptanId" component={Stop} />
-    </div>
-  </div>
+    </View>
+  </View>
 );
 
 export default App;
